@@ -27,7 +27,7 @@ class Usuario{
 
 	public function setDeslogin($value){
 
-		$this->dessenha = $value;
+		$this->deslogin = $value;
 
 	}
 	public function getDessenha(){
@@ -52,7 +52,7 @@ class Usuario{
 		$this->dtcadastro = $value;
 
 	}
-
+	//Método para listar somente um usuário pelo ID
 	public function loadById($id){
 
 		$sql = new Sql();
@@ -67,7 +67,49 @@ class Usuario{
 		}
 
 	}
+	//Transformando o método em STATIC eu posso chamar diretamente através do código Usuario::getList() sem necessidade de instanciar a classe new Usuario()
+	//Método para listar todos os usuários da tabela
+	public static function listarUsuarios(){
 
+		$sql = new Sql();
+		return $sql->select("SELECT * FROM tb_usuarios ORDER BY idusuario");
+
+	}
+	//Metodo para buscar somente um usuario especifico
+	public static function BuscarUsuario($login){
+
+		$sql = new Sql();
+		return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :LOGIN ORDER BY deslogin", array(
+			"LOGIN"=>"%".$login."%"
+		));
+
+	}
+	//Login de usuario
+	public function login($login, $senha){
+
+		$sql = new Sql();
+		$result = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN AND dessenha = :SENHA", array(
+
+			":LOGIN"=>$login,
+			":SENHA"=>$senha
+
+		));
+
+		if(isset($result[0])){
+			$row = $result[0];
+			$this->setIdusuario($row['idusuario']);
+			$this->setDeslogin($row['deslogin']);
+			$this->setDessenha($row['dessenha']);
+			$this->setDtcadastro(new DateTime($row['dtcadastro']));
+		} else{
+
+			throw new Exception("Login e/ou Senha inválidos");
+		}
+
+
+
+	}
+	//Método mágico para exibir dados de um objeto como string decodificada em json
 	public function __toString(){
 
 		return json_encode(array(
@@ -77,7 +119,6 @@ class Usuario{
 			"dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
 		));
 	}
-
 
 
 }
