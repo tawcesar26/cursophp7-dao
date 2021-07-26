@@ -19,10 +19,11 @@ $lista = Usuario::buscarUsuario("user");
 echo json_encode($lista);
 */
 
+/*
 $login = new Usuario();
 $login->login("user","123456");
 
 echo $login;
-
+*/
 
 ?>
