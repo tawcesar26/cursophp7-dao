@@ -25,5 +25,4 @@ $login->login("user","123456");
 echo $login;
 
 
-
 ?>
