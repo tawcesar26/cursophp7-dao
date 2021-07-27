@@ -31,7 +31,7 @@ class Sql extends PDO{
 
 	}
 
-	//Método para preparar e fazer o bind dos parametros, para depois executar
+	//Método para executar um script de banco de dados enviado pela classe Usuario.php
 	public function executarQuery($rawQuery, $params = array()){
 
 		$stmt = $this->conn->prepare($rawQuery);
