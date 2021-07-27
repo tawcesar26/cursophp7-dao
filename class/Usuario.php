@@ -113,6 +113,8 @@ public function setData($data){
 	$this->setDtcadastro(new DateTime($data['dtcadastro']));
 
 }
+
+
 //Método para cadastro de usuário
 public function insert(){
 
@@ -137,6 +139,8 @@ public function __construct($login = "", $senha = ""){
 
 }
 
+
+//Método para atualizar usuário
 public function update($login, $senha){
 
 	$this->setDeslogin($login);
@@ -150,9 +154,20 @@ public function update($login, $senha){
 		':SENHA'=>$this->getDessenha(),
 		':ID'=>$this->getIdusuario()
 	));
+}
 
+public function delete(){
 
+	$sql = new Sql();
 
+	$sql->select("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+		':ID'=>$this->getIdusuario()
+	));
+
+	$this->setIdusuario(0);
+	$this->setDeslogin();
+	$this->setDessenha();
+	$this->setDtcadastro(new DateTime());
 
 }
 
