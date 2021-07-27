@@ -107,20 +107,20 @@ public function login($login, $senha){
 public function setData($data){
 
 
-	$this->setIdusuario($row['idusuario']);
-	$this->setDeslogin($row['deslogin']);
-	$this->setDessenha($row['dessenha']);
-	$this->setDtcadastro(new DateTime($row['dtcadastro']));
+	$this->setIdusuario($data['idusuario']);
+	$this->setDeslogin($data['deslogin']);
+	$this->setDessenha($data['dessenha']);
+	$this->setDtcadastro(new DateTime($data['dtcadastro']));
 
 }
-
+//Método para cadastro de usuário
 public function insert(){
 
 	$sql = new SQL();
 
 	$results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :SENHA)", array(
-		':LOGIN'=>$this->getDeslogin();
-		':SENHA'=>$this->getDessenha();
+		':LOGIN'=>$this->getDeslogin(),
+		':SENHA'=>$this->getDessenha()
 	));
 
 	if(isset($results[0])){
@@ -129,8 +129,34 @@ public function insert(){
 	}
 
 }
+public function __construct($login = "", $senha = ""){
+
+	$this->setDEslogin($login);
+	$this->setDessenha($senha);
 
 
+}
+
+public function update($login, $senha){
+
+	$this->setDeslogin($login);
+	$this->setDessenha($senha);
+
+	$sql = new Sql();
+
+	$results = $sql->select("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :SENHA WHERE idusuario = :ID", array(
+
+		':LOGIN'=>$this->getDeslogin(),
+		':SENHA'=>$this->getDessenha(),
+		':ID'=>$this->getIdusuario()
+	));
+
+
+
+
+}
+
+/////////////////////
 
 //Método mágico para exibir dados de um objeto como string decodificada em json
 public function __toString(){
